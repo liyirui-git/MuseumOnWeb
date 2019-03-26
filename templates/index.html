@@ -5,14 +5,13 @@
     <title>Welcome!</title>
 </head>
 <body>
-<h1 align="center"> 欢迎来到智慧博物馆在线 </h1>
-<h6 align="right"> 版本号 v0.1.1 </h6>
+<h1 align="center" style="font-family: 方正苏新诗柳楷简体"> 欢迎来到智慧博物馆在线 </h1>
     <form action="/index/" method="post">
-        <p> 请输入搜索内容: </p>
-        <input type="text" name="search_content" size="40"/>
-        <input type="submit" name="search_submit"/>
+        <p style="font-family: 方正宋刻本秀楷简体"> 请输入搜索内容: </p>
+        <input type="text" style="font-family: 方正宋刻本秀楷简体" name="search_content" size="40"/>
+        <input type="submit" style="font-family: 方正宋刻本秀楷简体" name="search_submit" value="搜索"/>
     </form>
 
-    <p>{{ return_result }}</p>
+    <pre>{{ return_result }}</pre>
 </body>
 </html>
