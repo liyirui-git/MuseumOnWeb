@@ -41,4 +41,3 @@ def index(request):
             return render(request, "index.html", result_return)
     else:
         return render(request, "error_601.html")
-
