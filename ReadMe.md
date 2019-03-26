@@ -1,6 +1,7 @@
-#智慧博物馆网站版
-
+# 智慧博物馆网站版
+---------
 ## 一、文件结构：
+```
 -- MuseumOnWeb_v0
 ------ \_\_init__.py: Django自动生成的，存在的意义是使得Pycharm认为这是一个项目
 ------ settings.py: 相关的配置
@@ -23,3 +24,4 @@
 -- db.sqlite3: sqlite3是Django自带的一个小型的数据，可能是与其有关
 -- error_list: 报错信息对照表
 -- manage.py: Django自动生成的文件。
+```
