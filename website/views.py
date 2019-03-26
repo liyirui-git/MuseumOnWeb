@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .user_database import add_to_db, log_in
 from .search import click_search
-from .connectToD2RQ import *
+from .connect_d2rq import *
 import time
 # Create your views here.
 

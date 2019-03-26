@@ -1,6 +1,6 @@
 # 此处建了一个SPARQL的类
 from SPARQLWrapper import SPARQLWrapper, JSON
-from website.lexicalAnalyzer import *
+from website.lexical_analyzer import *
 sparql_head = '''PREFIX : <http://www.kgdemo.com#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>

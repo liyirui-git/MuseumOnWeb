@@ -1,4 +1,4 @@
-from website.searchWithSPARQL import *
+from website.search_via_sparql import *
 
 
 def click_search(content):
