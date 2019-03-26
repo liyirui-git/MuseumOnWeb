@@ -1,7 +1,8 @@
+#智慧博物馆网站版
 
-文件结构：
+## 一、文件结构：
 -- MuseumOnWeb_v0
------- __init__.py: Django自动生成的，存在的意义是使得Pycharm认为这是一个项目
+------ \_\_init__.py: Django自动生成的，存在的意义是使得Pycharm认为这是一个项目
 ------ settings.py: 相关的配置
 ------ urls.py: 控制从url到views.py中函数或者说到html网页的映射
 ------ wsgi.py: 网络连接相关的
@@ -9,7 +10,7 @@
 -- templates: 用来存放网页模板
 -- venv: Pycharm自动生成的Python37的环境。为保证程序的可移植性，最好把虚拟环境创建在每个项目里面
 -- website
------- __init__.py: Django自动生成的，存在的意义是使得Pycharm认为这是一个项目
+------ \_\_init__.py: Django自动生成的，存在的意义是使得Pycharm认为这是一个项目
 ------ admin.py:
 ------ apps.py:
 ------ connectToD2RQ.py: 这个是从我之前暑假的项目MuseumOffine里面直接移植过来的，主要负责开启D2RQ的服务
