@@ -23,4 +23,5 @@ urlpatterns = [
     path('', views.register),
     path('register/', views.register),
     path('index/', views.index),
+    re_path(r'^index/(?P<antique_name>(.*))', views.index_addition),
 ]

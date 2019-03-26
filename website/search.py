@@ -1,6 +1,7 @@
 from website.search_via_sparql import *
 
 
+# 在返回的结果中，当时为了在MuseumOffline中可以方便地显示，加入了很多的空格来排版，现在来看已经不需要了。
 def click_search(content):
     search = content
     result_text = "查找 > " + search + "\n"
@@ -117,6 +118,6 @@ def click_search(content):
 
                     result_text = result_text + "结果 > \n"
                     for result in result_list:
-                        result_text = result_text + "       " + result + '\n'
+                        result_text = result_text + result + '\n'
 
     return result_text
