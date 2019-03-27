@@ -20,8 +20,6 @@ class SPARQL:
         sparql.setReturnFormat(JSON)
         results = sparql.query().convert()
 
-        to_return = []
-
         return_dic = {}
 
         # 说明是文物，还需添加一些附加信息
@@ -30,13 +28,10 @@ class SPARQL:
                 if result["hasValue"]["type"] == 'literal':
                     print(result)
                     if result["property"]["value"].find("AntiName") != -1:
-                        to_return.append("【文物名】：" + result["hasValue"]["value"])
                         return_dic['name'] = result["hasValue"]["value"]
                     elif result["property"]["value"].find("AntiSize") != -1:
-                        to_return.append("【尺寸】：" + result["hasValue"]["value"])
                         return_dic['size'] = result["hasValue"]["value"]
                     elif result["property"]["value"].find("#label") != -1:
-                        to_return.append("【编号】：" + result["hasValue"]["value"].split("#")[1])
                         return_dic['number'] = result["hasValue"]["value"].split("#")[1]
             for result in results["results"]["bindings"]:
                 if result["hasValue"]["type"] == 'uri':
@@ -47,7 +42,6 @@ class SPARQL:
                             for item in DynastyList:
                                 if item[0] == dynasty_num:
                                     dynasty_name = item[1]
-                            to_return.append("【朝代】：" + dynasty_name)
                             return_dic['dynasty'] = dynasty_name
                             # 此处准备向推荐列表中添加朝代相关文物的内容：
                             add_recommend_list(dynasty_num, 1)
@@ -56,7 +50,6 @@ class SPARQL:
                             for item in DynastyDetailList:
                                 if item[0] == dynasty_d_num:
                                     dynasty_d_name = item[1]
-                            to_return.append("【详细朝代】：" + dynasty_d_name)
                             return_dic['dynasty_detail'] = dynasty_d_name
                             # ！！！！ 注意  ！！！！
                             # 此处应补充完推荐算法
@@ -66,7 +59,6 @@ class SPARQL:
                             for item in ProvinceList:
                                 if item[0] == province_num:
                                     province_name = item[1]
-                            to_return.append("【省份】：" + province_name)
                             return_dic['province'] = province_name
                             # 此处准备向推荐列表中添加省份的相关文物的内容：
                             add_recommend_list(province_num, 2)
@@ -75,14 +67,11 @@ class SPARQL:
                             for item in UsageList:
                                 if item[0] == usage_num:
                                     usage_name = item[1]
-                            to_return.append("【用途】：" + usage_name)
                             return_dic['usage'] = usage_name
                             # 此处准备向推荐列表中添加用途相关文物的内容：
                             add_recommend_list(usage_num, 1)
-            to_return.append("【相关文物】：")
             relevant = []
             for item in select_recommend_list(4):
-                to_return.append(item)
                 relevant.append(item)
             return_dic['relevant'] = relevant
         else:
@@ -95,7 +84,6 @@ class SPARQL:
                             for item in AntiqueList:
                                 if item[0] == antique_num:
                                     antique_name = item[1]
-                                    to_return.append(antique_name)
                                     relevant.append(antique_name)
                 except:
                     print("The value of \"isValueOf\" is None!")

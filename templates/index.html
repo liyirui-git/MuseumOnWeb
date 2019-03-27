@@ -47,7 +47,7 @@
 </head>
 <body>
 <h1 style="font-family: 田氏颜体大字库"> 欢迎来到智慧博物馆在线 </h1>
-    <form action="/index/" method="post">
+    <form action="/index/{{ antiquename }}={{ username }}/" method="post">
         <p> 【请输入搜索内容】: </p>
         <input type="text" style="font-family: 方正宋刻本秀楷简体" name="search_content" size="40"/>
         <input type="submit" style="font-family: 方正宋刻本秀楷简体" name="search_submit" value="搜索"/>
@@ -59,7 +59,7 @@
 <div>
     <p> 【相关推荐】：</p>
         {% for line in recommend %}
-            <form action="/index/{{ line }}" method="post">
+            <form action="/index/{{ line }}={{ username }}/" method="post">
                 <button>{{ line }}</button>
             </form>
         {% endfor %}

@@ -21,6 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.register),
     path('register/', views.register),
-    path('index/', views.index),
-    re_path(r'^index/(?P<antique_name>(.*))', views.index_addition),
+    path('index/', views.index_redirect),
+    re_path(r'^index/(?P<info>(.*))/', views.index_addition),
 ]

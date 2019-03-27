@@ -1,4 +1,4 @@
-from website.models import UserData
+from website.models import UserData, RecordViaUsername
 
 
 # 向用户数据库中添加一个项
@@ -17,3 +17,8 @@ def log_in(name, pw):
             return -1
     else:
         return -2
+
+
+def add_to_record(name, search):
+    record = RecordViaUsername(username=name, search=search)
+    record.save()

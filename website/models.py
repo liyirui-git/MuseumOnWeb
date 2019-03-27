@@ -14,8 +14,7 @@ class UserData(models.Model):
     limits = models.IntegerField()
 
 
-# 这里就不认为设计主键了，让他自己设置一个id自增。
-# username是用户名，inforname是查询的文物名。
-class UsingRecords(models.Model):
-      username = models.CharField(max_length=16)
-      inforname = models.CharField(max_length=32)
+# 让其自己加一个自增的主键就好
+class RecordViaUsername(models.Model):
+    username = models.CharField(max_length=16)
+    search = models.CharField(max_length=64)
