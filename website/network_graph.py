@@ -103,5 +103,7 @@ def graph(result_dic):
           graph_edge_length=100,
           graph_edge_symbol=['', 'arrow'],
           graph_repulsion=400)
+
+    # 此处如果打开会生成一个render.html
     # g.render()
     return g.render_embed()
