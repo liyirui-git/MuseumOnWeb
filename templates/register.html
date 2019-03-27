@@ -1,17 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+    h1
+    {
+        text-align:center;
+        color: #36563c;  <!-- 千岁绿 -->
+    }
+    span
+    {
+        font-family: 方正宋刻本秀楷简体;
+        color: #36563c;
+    }
+</style>
 <head>
     <meta charset="UTF-8">
-    <title>智慧博物馆用户登录</title>
+    <title>Register & Login</title>
 </head>
 <body>
-<h1 style="font-family: 方正苏新诗柳楷简体" align="center">用户登录</h1>
+<h1 style="font-family: 田氏颜体大字库" align="center">智慧博物馆用户登录</h1>
     <!--这个地方action = '/index/'的意思应该是执行动作以后转跳到/index/-->
     <form action="/index/" method="post" align="center">
-        <span style="font-family: 方正宋刻本秀楷简体"> 用户名: </span>
+        <span> 用户名: </span>
         <input type="text" name="username"/>
         <p></p>
-        <span style="font-family: 方正宋刻本秀楷简体"> 密码: </span>
+        <span> 密码: </span>
         <input type="password" name="password"/>
         <p></p>
         <input type="submit" style="font-family: 方正宋刻本秀楷简体" name="login" value="登录"/>

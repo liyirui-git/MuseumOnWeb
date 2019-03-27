@@ -22,17 +22,22 @@ class SPARQL:
 
         to_return = []
 
+        return_dic = {}
+
         # 说明是文物，还需添加一些附加信息
         if mode == 1:
             for result in results["results"]["bindings"]:
                 if result["hasValue"]["type"] == 'literal':
                     print(result)
                     if result["property"]["value"].find("AntiName") != -1:
-                        to_return.append("【文物名】："+result["hasValue"]["value"])
+                        to_return.append("【文物名】：" + result["hasValue"]["value"])
+                        return_dic['name'] = result["hasValue"]["value"]
                     elif result["property"]["value"].find("AntiSize") != -1:
-                        to_return.append("【尺寸】："+result["hasValue"]["value"])
+                        to_return.append("【尺寸】：" + result["hasValue"]["value"])
+                        return_dic['size'] = result["hasValue"]["value"]
                     elif result["property"]["value"].find("#label") != -1:
-                        to_return.append("【编号】："+result["hasValue"]["value"].split("#")[1])
+                        to_return.append("【编号】：" + result["hasValue"]["value"].split("#")[1])
+                        return_dic['number'] = result["hasValue"]["value"].split("#")[1]
             for result in results["results"]["bindings"]:
                 if result["hasValue"]["type"] == 'uri':
                     if result["hasValue"]["value"].find("resource") != -1:
@@ -43,6 +48,7 @@ class SPARQL:
                                 if item[0] == dynasty_num:
                                     dynasty_name = item[1]
                             to_return.append("【朝代】：" + dynasty_name)
+                            return_dic['dynasty'] = dynasty_name
                             # 此处准备向推荐列表中添加朝代相关文物的内容：
                             add_recommend_list(dynasty_num, 1)
                         elif second_info.find("antique_dynasty") != -1:
@@ -51,6 +57,7 @@ class SPARQL:
                                 if item[0] == dynasty_d_num:
                                     dynasty_d_name = item[1]
                             to_return.append("【详细朝代】：" + dynasty_d_name)
+                            return_dic['dynasty_detail'] = dynasty_d_name
                             # ！！！！ 注意  ！！！！
                             # 此处应补充完推荐算法
                             #
@@ -60,6 +67,7 @@ class SPARQL:
                                 if item[0] == province_num:
                                     province_name = item[1]
                             to_return.append("【省份】：" + province_name)
+                            return_dic['province'] = province_name
                             # 此处准备向推荐列表中添加省份的相关文物的内容：
                             add_recommend_list(province_num, 2)
                         elif second_info.find("antique_usage") != -1:
@@ -68,12 +76,17 @@ class SPARQL:
                                 if item[0] == usage_num:
                                     usage_name = item[1]
                             to_return.append("【用途】：" + usage_name)
+                            return_dic['usage'] = usage_name
                             # 此处准备向推荐列表中添加用途相关文物的内容：
                             add_recommend_list(usage_num, 1)
             to_return.append("【相关文物】：")
+            relevant = []
             for item in select_recommend_list(4):
                 to_return.append(item)
+                relevant.append(item)
+            return_dic['relevant'] = relevant
         else:
+            relevant = []
             for result in results["results"]["bindings"]:
                 try:
                     if result["isValueOf"]["type"] == 'uri':
@@ -83,11 +96,12 @@ class SPARQL:
                                 if item[0] == antique_num:
                                     antique_name = item[1]
                                     to_return.append(antique_name)
-
+                                    relevant.append(antique_name)
                 except:
                     print("The value of \"isValueOf\" is None!")
-
-        return to_return
+            return_dic['relevant'] = relevant
+        # print(relevant)
+        return return_dic
 
 
 def search_antique_with_num(num):
@@ -139,12 +153,13 @@ def add_recommend_list(key_num, mode):
     # mode -> 4, Dynasty Detail
     # 注意，mode 4 目前没有启用
     if mode == 1:
-        antique_list = search_dynasty_with_num(key_num)
+        antique_dic = search_dynasty_with_num(key_num)
     elif mode == 2:
-        antique_list = search_province_with_num(key_num)
+        antique_dic = search_province_with_num(key_num)
     elif mode == 3:
-        antique_list = search_usage_with_num(key_num)
+        antique_dic = search_usage_with_num(key_num)
 
+    antique_list = antique_dic['relevant']
     for antique in antique_list:
         exist = 0
         for re in recommend_list:

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .user_database import add_to_db, log_in
 from .search import click_search
 from .connect_d2rq import *
+from .network_graph import graph
 import time
 # Create your views here.
 
@@ -42,16 +43,15 @@ def index(request):
             # 这个地方通过一个函数，把search_content传到后端，然后接收后端传过来的结果返回给网页。
             result_return = {}
             search_content = request.POST.get("search_content", None)
-            result = click_search(search_content).split("【相关文物】：\n")
-            result_return['return_result'] = result[0]
-            if len(result) > 1:
-                recommend_list = result[1].split('\n')
-                # 因为由于格式的原因，划分完以后，最后一个元素是个空
-                recommend_list.pop()
+            result_dic = click_search(search_content)
+            # result_return['return_result'] = result[0]
+            result_return['network_graph'] = graph(result_dic)
+            if 'relevant' in result_dic and len(result_dic['relevant']) > 1:
+                recommend_list = result_dic['relevant']
                 result_return['recommend'] = recommend_list
                 return render(request, "index.html", result_return)
             else:
-                return render(request, "index.html")
+                return render(request, "index.html", result_return)
         else:
             return render(request, "index.html")
     else:
@@ -64,10 +64,12 @@ def index(request):
 def index_addition(request, antique_name):
     result_return = {}
     search_content = antique_name
-    result = click_search(search_content).split("【相关文物】：\n")
-    result_return['return_result'] = result[0]
-    recommend_list = result[1].split('\n')
-    # 因为由于格式的原因，划分完以后，最后一个元素是个空
-    recommend_list.pop()
-    result_return['recommend'] = recommend_list
-    return render(request, "index.html", result_return)
+    result_dic = click_search(search_content)
+    # result_return['return_result'] = result[0]
+    result_return['network_graph'] = graph(result_dic)
+    if len(result_dic['relevant']) > 1:
+        recommend_list = result_dic['relevant']
+        result_return['recommend'] = recommend_list
+        return render(request, "index.html", result_return)
+    else:
+        return render(request, "index.html", result_return)
