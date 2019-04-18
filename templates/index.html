@@ -54,22 +54,30 @@
     </form>
     <pre>{{ return_result }}</pre>
 <div>
-    {{ network_graph | safe }}
-</div>
-<div>
-    <p> 【相关推荐】：</p>
-        {% for line in recommend %}
+    <div>
+        <div style = 'float:left;'>
+            <img src = "{{ image_path }}" alt = '文物图片'>
+        </div>
+        <div style = 'float:left;'>
+            {{ network_graph | safe }}
+        </div>
+    </div>
+    <div style = 'display:inline-block;'>
+        <div>
+             <p> 【相关推荐】：</p>
+            {% for line in recommend %}
             <form action="/index/{{ line }}={{ username }}/" method="post">
                 <button>{{ line }}</button>
             </form>
-        {% endfor %}
-</div>
-<div>
-    <p> 【使用指南】：</p>
-    <p>如果想要获取某一文物的相关信息，以后母戊鼎为例，只需输入文物名“后母戊鼎”，并点击查询。</p>
-    <p>直接输入朝代名，例如“清”可以得到清朝的所有文物。省份、用途同理。</p>
-    <p>也支持直接按照编号索引进行查询。比如输入“【文物】1”，就可以得到编号为1的文物。【朝代】、【省份】、【用途】同理。</p>
-    <p>除此之外，可以输入【搜索】后加想要搜索的文物的名，比如“【搜索】乾隆”，就会得到所有名字中带乾隆的文物以及信息。"</p>
+            {% endfor %}
+        </div>
+        <div>
+            <p> 【使用指南】：</p>
+            <p>如果想要获取某一文物的相关信息，以后母戊鼎为例，只需输入文物名“后母戊鼎”，并点击查询。</p>
+            <p>直接输入朝代名，例如“清”可以得到清朝的所有文物。省份、用途等属性同理。</p>
+            <p>除此之外，可以输入【搜索】后加想要搜索的文物的名，比如“【搜索】乾隆”，就会得到所有名字中带乾隆的文物以及信息。"</p>
+        </div>
+    </div>
 </div>
 </body>
 </html>

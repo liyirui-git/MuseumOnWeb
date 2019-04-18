@@ -194,4 +194,3 @@ ProvinceList = load_dict_from_file("website/src/ProvinceNumName.txt")
 UsageList = load_dict_from_file("website/src/UsageNumName.txt")
 AntiqueList = load_dict_from_file("website/src/AntiqueNumName.txt")
 sparql = SPARQL()
-

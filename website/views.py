@@ -110,7 +110,12 @@ def index_addition(request, info):
             add_to_record(user_name, result_dic['name'])
         result_return['network_graph'] = graph(result_dic)
         result_return['username'] = user_name
-        if 'relevant' in result_dic and len(result_dic['relevant']) > 1:
+        if 'museum' in result_dic:
+            if result_dic['museum'] == '中国国家博物馆':
+                result_return['image_path'] = '/images/chn_pic/' + result_dic['number'][1:] + '.jpg'
+            elif result_dic['museum'] == '故宫博物院':
+                result_return['image_path'] = '/images/dpm_pic/' + result_dic['number'][1:] + '.jpg'
+        if 'relevant' in result_dic and len(result_dic['relevant']) >= 1:
             recommend_list = result_dic['relevant']
             result_return['recommend'] = recommend_list
             return render(request, "index.html", result_return)
@@ -120,9 +125,14 @@ def index_addition(request, info):
         result_dic = click_search(antique_name)
         result_return['network_graph'] = graph(result_dic)
         result_return['username'] = user_name
+        if 'museum' in result_dic:
+            if result_dic['museum'] == '中国国家博物馆':
+                result_return['image_path'] = '/images/chn_pic/' + result_dic['number'][1:] + '.jpg'
+            elif result_dic['museum'] == '故宫博物院':
+                result_return['image_path'] = '/images/dpm_pic/' + result_dic['number'][1:] + '.jpg'
         if 'name' in result_dic:
             add_to_record(user_name, result_dic['name'])
-        if 'relevant' in result_dic and len(result_dic['relevant']) > 1:
+        if 'relevant' in result_dic and len(result_dic['relevant']) >= 1:
             recommend_list = result_dic['relevant']
             result_return['recommend'] = recommend_list
             return render(request, "index.html", result_return)

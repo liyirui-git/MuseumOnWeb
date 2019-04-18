@@ -15,7 +15,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from django.conf.urls import *
+from django.conf import settings
+from django.conf.urls.static import static
 from website import views
+from django.views.static import serve
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,4 +26,6 @@ urlpatterns = [
     path('register/', views.register),
     path('index/', views.index_redirect),
     re_path(r'^index/(?P<info>(.*))/', views.index_addition),
+    # 显示文物图片
+    re_path(r'^images/(?P<path>.*)$', serve, {'document_root': 'C:/Users/Iry Lee/Pictures/museum_images'}),
 ]

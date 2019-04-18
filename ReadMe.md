@@ -17,8 +17,10 @@
 ------ lexical_qnalyzer.py: 这个也是从我之前暑假的项目MuseumOffline里面直接移植过来的，主要是调用了THULAC的分词库，实现分词。
 ------ models.py: Django的模型文件，负责在MySQL中创建一个表，我这里让其创建的是用户登录信息表。
 ------ network_graph.py: 使用pyecharts的库，生成关系图。
------- search.py: 只有一个函数，就是click_search，这个是也是从暑假的项目移过来以后稍微做了一些修改，从之前将数据传给GUI的控件改为了返回一个字符串。它负责处理网页搜索框中用户输入的文本。
+------ search_old.py: 只有一个函数，就是click_search，这个是也是从暑假的项目移过来以后稍微做了一些修改，从之前将数据传给GUI的控件改为了返回一个字符串。它负责处理网页搜索框中用户输入的文本。
+------ search.py: 之前的通过SPARQL进行交互的程序留在了search_old.py里面，这里从新构造了一个配合search_via_sql.py完成交互的查询。
 ------ search_via_sparql.py: 这个也是从我暑假的项目里面移植过来的，负责通过SPARQL语言在localhost:2020端口与D2RQ进行交互。
+------ search_via_sql.py: 这个是新建的一个通过SQL语句与MySQL进行直接的交互，
 ------ user_database.py 负责与MySQL进行交互
 ------ views.py 负责控制视图，和应对网页的中被触发的请求，是urls与html之间的桥梁。
 -- db.sqlite3: sqlite3是Django自带的一个小型的数据，可能是与其有关
