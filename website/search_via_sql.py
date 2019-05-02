@@ -1,5 +1,18 @@
+# 推荐算法：
+# 推荐算法采用统计相同朝代(1)、省份(1)、用途(1)、以及详细朝代(2)的文物，括号中是各自的权重
+# 每次从相关文物中选取权重最高的五个推荐给用户。
+# 推荐列表结构：
+# |文物名|目前的分|
+# | xxx |  xxx  |
+
+# 这里通过加载的文件岂不是有点慢，直接连数据库访问数据库呗
+# 暑假的时候，为了实现文物或者其他实体的编号与实体名字之间的对应关系，是通过读取资源文件存到列表里，然后在列表中搜索实现的。
+# 随着数据量的增长，这种方法一是占用内存，还有列表的搜索太慢。
+# 为什么要拿名字再回去找序号呢？因为我现在还没解决SPARQL不支持中文的问题，后面会继续尝试直接解决，但在现在暂时改为数据库查询实现。
+
 import MySQLdb
 from website.lexical_analyzer import *
+from website.recommend import weight_recommend, item_based_CF
 
 # 通过自己定义的用户词典，启动一个封装好的针对当前文物的THULAC
 # 除了subtype表，其他表中的名字都被我加进去了。
@@ -7,18 +20,19 @@ antiqueNameLA = myLA("website/src/userName_new.txt")
 
 
 def do_search(num, mode, name, word_list):
-    # mode
     db = MySQLdb.connect('localhost', 'root', '123456', 'museumdb_new', charset='utf8')
     cursor = db.cursor()
+    # mode
     result_dic = {}
     # mode-> 0：通过分词结果查找
+    # 这里就可以添加一些自然语言的规则
     if mode == 0:
         for user_word in word_list:
             # 这里暂时先处理出现了文物名的情况
+            # 对于出现文物名的情况，还要处理文物的推荐结果
             cursor.execute('SELECT * FROM antique WHERE AntiName = %s'
                            % repr(user_word))
             result = cursor.fetchall()
-            print(str(result))
             if len(result) > 0 and len(result[0][0]) > 0:
                 ##########
                 # antique 的结构
@@ -74,7 +88,10 @@ def do_search(num, mode, name, word_list):
                 result_dic['story'] = result[0][23]
                 result_dic['simple'] = result[0][24]
                 result_dic['introduction'] = result[0][25]
+                # 添加推荐文物
+                result_dic['relevant'] = weight_recommend(result[0])
 
+                result_dic['item_CF'] = item_based_CF(result[0])
     # mode-> 1：通过输入文物名中的片段来模糊查找
     # 将得到的结果作为推荐文物返回给使用者
     elif mode == 1:
@@ -97,6 +114,7 @@ def do_search(num, mode, name, word_list):
             recommend_list.append(item[0])
         result_dic['relevant'] = recommend_list
     # mode-> 4：说明输入是省份序号
+    # 同样将得到的结果作为推荐返回给使用者
     elif mode == 4:
         cursor.execute('SELECT AntiName FROM antique WHERE AntiProvinceNum = %d'
                        % num)
@@ -109,17 +127,5 @@ def do_search(num, mode, name, word_list):
     db.commit()
     db.close()
     return result_dic
-
-# 推荐算法：
-# 推荐算法采用统计相同朝代(1)、省份(1)、用途(1)、以及详细朝代(2)的文物，括号中是各自的权重
-# 每次从相关文物中选取权重最高的五个推荐给用户。
-# 推荐列表结构：
-# |文物名|目前的分|
-# | xxx |  xxx  |
-
-# 这里通过加载的文件岂不是有点慢，直接连数据库访问数据库呗
-# 暑假的时候，为了实现文物或者其他实体的编号与实体名字之间的对应关系，是通过读取资源文件存到列表里，然后在列表中搜索实现的。
-# 随着数据量的增长，这种方法一是占用内存，还有列表的搜索太慢。
-# 为什么要拿名字再回去找序号呢？因为我现在还没解决SPARQL不支持中文的问题，后面会继续尝试直接解决，但在现在暂时改为数据库查询实现。
 
 

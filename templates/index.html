@@ -4,7 +4,7 @@
     h1
     {
         text-align:center;
-        color: #36563c;  <!-- 千岁绿 -->
+        color: #36563c; 
     }
     p
     {
@@ -16,6 +16,11 @@
         margin:0px;
         display: inline
     }
+    img
+    {
+		 max-height:390px;
+		 max-width: 780px; 
+	 }
 </style>
 <head>
     <meta charset="UTF-8">
@@ -47,7 +52,7 @@
 </head>
 <body>
 <h1 style="font-family: 田氏颜体大字库"> 欢迎来到智慧博物馆在线 </h1>
-    <form action="/index/{{ antiquename }}={{ username }}/" method="post">
+    <form action="/index/{{ antiquename }}={{ username }}=/" method="post">
         <p> 【请输入搜索内容】: </p>
         <input type="text" style="font-family: 方正宋刻本秀楷简体" name="search_content" size="40"/>
         <input type="submit" style="font-family: 方正宋刻本秀楷简体" name="search_submit" value="搜索"/>
@@ -64,10 +69,23 @@
     </div>
     <div style = 'display:inline-block;'>
         <div>
+            <p> 【详细介绍】：</p>
+            <p> {{ introduction }} </p>
+        </div>
+        <div>
+            <p> 【浏览该文物的人也浏览了】：</p>
+           {% for line in item_CF %}
+           <form action="/index/{{ line }}={{ username }}=/" method="post">
+               <button>{{ line }}</button>
+           </form>
+           {% endfor %}
+       </div>
+        <div>
              <p> 【相关推荐】：</p>
             {% for line in recommend %}
-            <form action="/index/{{ line }}={{ username }}/" method="post">
-                <button>{{ line }}</button>
+            <form action="/index/{{ line }}={{ username }}={{ old_antiname }}/" method="post">
+                <input type = 'hidden' name = 'hidden_list' value = '{{ recommend_return }}'>
+                <input type = 'submit' name='recommend_button' value = '{{ line }}'>
             </form>
             {% endfor %}
         </div>
