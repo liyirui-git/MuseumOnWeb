@@ -42,3 +42,11 @@ class RecommendRecord(models.Model):
     antique6 = models.CharField(max_length=64)
     antique7 = models.CharField(max_length=64)
     time = models.IntegerField()
+
+
+# 记录用户的搜索记录
+class SearchRecord(models.Model):
+    username = models.CharField(max_length=16)
+    search = models.CharField(max_length=128)
+    time = models.IntegerField()
+    valid = models.IntegerField()

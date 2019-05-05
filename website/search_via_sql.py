@@ -12,14 +12,14 @@
 
 import MySQLdb
 from website.lexical_analyzer import *
-from website.recommend import weight_recommend, item_based_CF
+from website.recommend import weight_recommend, item_based_CF_new
 
 # 通过自己定义的用户词典，启动一个封装好的针对当前文物的THULAC
 # 除了subtype表，其他表中的名字都被我加进去了。
 antiqueNameLA = myLA("website/src/userName_new.txt")
 
 
-def do_search(num, mode, name, word_list):
+def do_search(num, mode, name, word_list, username):
     db = MySQLdb.connect('localhost', 'root', '123456', 'museumdb_new', charset='utf8')
     cursor = db.cursor()
     # mode
@@ -91,7 +91,7 @@ def do_search(num, mode, name, word_list):
                 # 添加推荐文物
                 result_dic['relevant'] = weight_recommend(result[0])
 
-                result_dic['item_CF'] = item_based_CF(result[0])
+                result_dic['item_CF'] = item_based_CF_new(result[0], username)
     # mode-> 1：通过输入文物名中的片段来模糊查找
     # 将得到的结果作为推荐文物返回给使用者
     elif mode == 1:

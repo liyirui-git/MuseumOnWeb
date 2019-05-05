@@ -1,6 +1,7 @@
 import MySQLdb
 import time
 import math
+import numpy as np
 
 weight_table = {
     'DY': 1,
@@ -24,7 +25,7 @@ weight_table = {
 
 recommend_size = 8
 weight_max = 100000
-
+cosine_threshold = 0.35
 # 我按照三天26万秒来估计的，期望三天能够冷却到之前的一半
 # 先把秒降数量级，除以10万得到2.6。
 # -2.6 * k = ln(1/2) 即 2.6 * k = ln(2)
@@ -37,6 +38,20 @@ Punish_K = 20
 # 规定协同过滤推荐的个数
 CF_NUM = 5
 
+# 连接文物数据，得到文物名表
+db_antique = MySQLdb.connect('localhost', 'root', '123456', 'museumdb_new', charset='utf8')
+cursor_antique = db_antique.cursor()
+# 存放文物名的字典
+antique_dic = {}
+cursor_antique.execute('SELECT DISTINCT AntiName FROM antique;')
+antique_name = cursor_antique.fetchall()
+antique_ct = 0
+for item in antique_name:
+    antique_dic[item[0]] = antique_ct
+    antique_ct = antique_ct + 1
+db_antique.close()
+
+
 # 获取列表的第二个元素
 def take_second(elem):
     return elem[1]
@@ -47,6 +62,27 @@ def heat(dt):
     return math.exp(-1 * Newton_K * dt / 100000)
 
 
+# 计算余弦相似度
+# 结果应该是数值越小越相似。数值的分布的范围为是[0，1]
+def cosine_distance(a, b):
+    if len(a) != len(b):
+        return False
+    numerator = 0
+    denoma = 0
+    denomb = 0
+    for i in range(len(a)):
+        numerator += a[i]*b[i]
+        denoma += abs(a[i])**2
+        denomb += abs(b[i])**2
+    noma = (math.sqrt(denoma)*math.sqrt(denomb))
+    if noma != 0:
+        result = 1 - numerator / noma
+    else:
+        result = 1.0
+    return result
+
+
+# 这个是一个最初的非常朴素的一个协同过滤
 def item_based_CF(infor):
     db = MySQLdb.connect('localhost', 'root', '123456', 'museum_website_v0', charset='utf8')
     cursor = db.cursor()
@@ -71,13 +107,73 @@ def item_based_CF(infor):
     db.close()
     recommend_list.sort(key=take_second, reverse=True)
     ct = 0
-    print(recommend_list)
+    # print(recommend_list)
     recommend_return = []
     for item in recommend_list:
         recommend_return.append(item[0])
         ct = ct + 1
         if ct == CF_NUM:
             break
+    return recommend_return
+
+
+def get_user_vector(username, cursor_website):
+    # 先得到当前用户的浏览记录，生成用户向量
+    # print(username)
+    cursor_website.execute('SELECT search FROM website_recordviausername WHERE username = %s'
+                           % repr(username))
+    search_record = cursor_website.fetchall()
+    vector = []
+    # 先将向量数组初始化为全0
+    for i in range(0, len(antique_dic)):
+        vector.append(0)
+    # 然后把出现的文物的位置置为1
+    for one in search_record:
+        if one[0] in antique_dic:
+            # print(one[0] + " is " + str(antique_dic[one[0]]))
+            vector[antique_dic[one[0]]] = 1
+    return vector
+
+
+# 这个是利用余弦距离计算用户相似度来对协同过滤做的改进
+def item_based_CF_new(infor, username):
+    db_website = MySQLdb.connect('localhost', 'root', '123456', 'museum_website_v0', charset='utf8')
+    cursor_website = db_website.cursor()
+    a = get_user_vector(username, cursor_website)
+    cursor_website.execute('SELECT DISTINCT username FROM website_recordviausername')
+    user_list = cursor_website.fetchall()
+    similar_list = []
+    for user in user_list:
+        if user[0] != username:
+            b = get_user_vector(user[0], cursor_website)
+            cosine_dis = cosine_distance(a, b)
+            # print('<cosine_dis>:' + str(cosine_dis))
+            if cosine_dis < cosine_threshold:
+                similar_list.append(user[0])
+    antique_list = []
+    for person in similar_list:
+        cursor_website.execute('SELECT DISTINCT search, valid FROM website_searchrecord WHERE username = %s'
+                               % repr(person))
+        antique_get = cursor_website.fetchall()
+        for item in antique_get:
+            flag = 0
+            if item[1] == 0 or item[0] == infor[1]:
+                continue
+            for one in antique_list:
+                if one[0] == item:
+                    one[1] = one[1] + 1
+                    flag = 1
+            if flag == 0:
+                antique_list.append([item[0], 1])
+    antique_list.sort(key=take_second, reverse=True)
+    recommend_return = []
+    ct = 0
+    for item in antique_list:
+        recommend_return.append(item[0])
+        ct = ct + 1
+        if ct == 5:
+            break
+    db_website.close()
     return recommend_return
 
 
@@ -201,7 +297,7 @@ def weight_recommend(infor):
     # 也可一开始就按序插入，这样当空间满了以后，只需要跟最后一个比较。
     # 如果比最后一个权值大，删掉最后一个，再按序插入。
     weight_list.sort(key=take_second, reverse=True)
-    print(weight_list)
+    # print(weight_list)
     for one in weight_list:
         recommend_list.append(one[0])
     db.close()

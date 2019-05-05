@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .user_database import add_to_db, log_in, add_to_record, add_to_recommend_record
+from .user_database import add_to_db, log_in, add_to_record, add_to_recommend_record, add_to_search_record
 from .search import click_search
 from .connect_d2rq import *
 from .network_graph import graph
@@ -120,9 +120,12 @@ def index_addition(request, info):
                                 antique1, antique2, antique3, antique4, antique5, antique6, antique7)
     if request.method == 'POST' and 'search_submit' in request.POST:
         search_content = request.POST.get("search_content", None)
-        result_dic = click_search(search_content)
+        result_dic = click_search(search_content, user_name)
         if 'name' in result_dic:
             add_to_record(user_name, result_dic['name'])
+            add_to_search_record(user_name, result_dic['name'], int(time.time()), 1)
+        else:
+            add_to_search_record(user_name, result_dic['name'], int(time.time()), 0)
         # 生成关系图
         result_return['old_antiname'] = result_dic['name']
         result_return['network_graph'] = graph(result_dic)
@@ -148,7 +151,7 @@ def index_addition(request, info):
             result_return['recommend'] = defult_recommend
             return render(request, "index.html", result_return)
     else:
-        result_dic = click_search(antique_name)
+        result_dic = click_search(antique_name, user_name)
         # 生成关系图
         result_return['old_antiname'] = antique_name
         result_return['network_graph'] = graph(result_dic)
