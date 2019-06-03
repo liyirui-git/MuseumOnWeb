@@ -124,10 +124,9 @@ def index_addition(request, info):
         if 'name' in result_dic:
             add_to_record(user_name, result_dic['name'])
             add_to_search_record(user_name, result_dic['name'], int(time.time()), 1)
+            result_return['old_antiname'] = result_dic['name']
         else:
-            add_to_search_record(user_name, result_dic['name'], int(time.time()), 0)
-        # 生成关系图
-        result_return['old_antiname'] = result_dic['name']
+            add_to_search_record(user_name, search_content, int(time.time()), 0)
         result_return['network_graph'] = graph(result_dic)
         result_return['username'] = user_name
         if 'museum' in result_dic:

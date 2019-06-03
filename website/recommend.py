@@ -38,7 +38,7 @@ Punish_K = 20
 # 规定协同过滤推荐的个数
 CF_NUM = 5
 
-# 连接文物数据，得到文物名表
+# # 连接文物数据，得到文物名表
 db_antique = MySQLdb.connect('localhost', 'root', '123456', 'museumdb_new', charset='utf8')
 cursor_antique = db_antique.cursor()
 # 存放文物名的字典
@@ -50,6 +50,14 @@ for item in antique_name:
     antique_dic[item[0]] = antique_ct
     antique_ct = antique_ct + 1
 db_antique.close()
+
+# 得到实体表
+entity_table = {}
+entity_file = open('website/src/entity.txt', encoding='utf8')
+entity_ct = 0
+for line in entity_file.readlines():
+    entity_table[line.split()[0]] = entity_ct
+    entity_ct = entity_ct + 1
 
 
 # 获取列表的第二个元素
@@ -132,6 +140,27 @@ def get_user_vector(username, cursor_website):
         if one[0] in antique_dic:
             # print(one[0] + " is " + str(antique_dic[one[0]]))
             vector[antique_dic[one[0]]] = 1
+    return vector
+
+
+def get_user_vector_via_proper(username, cursor_website):
+    # 得到用户当前用户
+    cursor_website.execute('SELECT search FROM website_recordviausername WHERE username = %s'
+                           % repr(username))
+    search_record = cursor_website.fetchall()
+    vector = []
+    # 先将向量数组初始化为全0
+    for i in range(0, len(entity_table)):
+        vector.append(0)
+    for one in search_record:
+        cursor_antique.execute('SELECT AntiDY, AntiProvince, AntiKiln, AntiType, AntiTexture, AntiMuseum, AntiUsage FROM antique WHERE AntiName = %s'
+                               % repr(one[0]))
+        antique_detail = cursor_antique.fetchall()
+        for item in antique_detail:
+            for i in item:
+                if i in entity_table:
+                    print(i)
+                    vector[entity_table[i]] = vector[entity_table[i]] + 1
     return vector
 
 
