@@ -15,6 +15,7 @@ defult_recommend = ['后母戊鼎',
                     '孝端皇后凤冠',
                     '紫檀嵌珐琅重檐楼阁更钟']
 
+_image_path = 'D:/museum_pictures'
 
 def register(request):
     # print(request.META)

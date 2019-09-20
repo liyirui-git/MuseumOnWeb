@@ -27,5 +27,5 @@ urlpatterns = [
     path('index/', views.index_redirect),
     re_path(r'^index/(?P<info>(.*))/', views.index_addition),
     # 显示文物图片
-    re_path(r'^images/(?P<path>.*)$', serve, {'document_root': 'C:/Users/Iry Lee/Pictures/museum_images'}),
+    re_path(r'^images/(?P<path>.*)$', serve, {'document_root': 'D:/museum_pictures'}),
 ]

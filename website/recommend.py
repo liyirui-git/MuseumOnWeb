@@ -1,7 +1,6 @@
 import MySQLdb
 import time
 import math
-import numpy as np
 
 weight_table = {
     'DY': 1,

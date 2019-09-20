@@ -27,3 +27,17 @@
 -- error_list: 报错信息对照表
 -- manage.py: Django自动生成的文件。
 ```
+## 二、有关外部包
+主要用到的外部的包有：
+- pyecharts==0.5.11（这里主要原因是pyecharts 1.0版本不再向下兼容，安装方法为“pip install pyecharts==0.5.11”）
+【补充说明】在重新安装配置pyecharts的过程中，本人遇到了contextvar.py文件报错：找不到模块“_contextvar.py”。但是发现在pycharm中ctrl加左键点击能够打开文件“_contextvar.py”
+于是找到_contextvar.py文件所处的位置，将该文件移动到contextvar.py所处的文件夹下即可。
+- thulac
+- mysqlclient
+
+## 三、写给自己
+如果想在Terminal中启动的话：
+输入命令 
+'''
+C:\ProgramFiles\Anaconda3\python manage.py runserver 0.0.0.0:8080
+'''
