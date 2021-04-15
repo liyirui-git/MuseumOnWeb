@@ -34,6 +34,7 @@
 于是找到_contextvar.py文件所处的位置，将该文件移动到contextvar.py所处的文件夹下即可。
 - thulac
 - mysqlclient
+- django
 
 ## 三、写给自己
 如果想在Terminal中启动的话：
