@@ -37,8 +37,15 @@
 - django
 
 ## 三、写给自己
-如果想在Terminal中启动的话：
+##### 1.在Terminal中启动
 输入命令 
 '''
 C:\ProgramFiles\Anaconda3\python manage.py runserver 0.0.0.0:8080
 '''
+
+##### 2.在docker中运行
+在docker容器中运行的话，需要先激活 `(museum)` conda环境，然后去到 `/home/MuseumOnWeb` 文件夹下，运行命令：
+```
+PYTHONIOENCODING=utf8 python manage.py runserver 0.0.0.0:8080
+```
+
