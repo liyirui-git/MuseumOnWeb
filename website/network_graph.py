@@ -348,7 +348,7 @@ def graph(result_dic):
 
     # 后面考虑把relevant也加进来。
 
-    db = MySQLdb.connect('localhost', 'root', '123456', 'museumdb_new', charset='utf8')
+    db = MySQLdb.connect('127.0.0.1', 'root', '123456', 'museumdb_new', charset='utf8')
     cursor = db.cursor()
     if 'relevant' in result_dic:
         i = 0

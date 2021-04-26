@@ -44,7 +44,7 @@ dynasty_detail = {
 
 
 def do_search(num, mode, name, word_list, username):
-    db = MySQLdb.connect('localhost', 'root', '123456', 'museumdb_new', charset='utf8')
+    db = MySQLdb.connect('127.0.0.1', 'root', '123456', 'museumdb_new', charset='utf8')
     cursor = db.cursor()
     # mode
     result_dic = {}

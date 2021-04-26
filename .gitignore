@@ -1,0 +1,5 @@
+*/images/
+/.empty/
+/.idea/
+*/__pycache__/
+*/*/__pycache__/

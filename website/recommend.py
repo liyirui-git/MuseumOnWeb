@@ -38,7 +38,7 @@ Punish_K = 20
 CF_NUM = 5
 
 # # 连接文物数据，得到文物名表
-db_antique = MySQLdb.connect('localhost', 'root', '123456', 'museumdb_new', charset='utf8')
+db_antique = MySQLdb.connect('127.0.0.1', 'root', '123456', 'museumdb_new', charset='utf8')
 cursor_antique = db_antique.cursor()
 # 存放文物名的字典
 antique_dic = {}
@@ -91,7 +91,7 @@ def cosine_distance(a, b):
 
 # 这个是一个最初的非常朴素的一个协同过滤
 def item_based_CF(infor):
-    db = MySQLdb.connect('localhost', 'root', '123456', 'museum_website_v0', charset='utf8')
+    db = MySQLdb.connect('127.0.0.1', 'root', '123456', 'museum_website_v0', charset='utf8')
     cursor = db.cursor()
     recommend_list = []
     cursor.execute('SELECT DISTINCT username FROM website_recordviausername WHERE search = %s'
@@ -165,7 +165,7 @@ def get_user_vector_via_proper(username, cursor_website):
 
 # 这个是利用余弦距离计算用户相似度来对协同过滤做的改进
 def item_based_CF_new(infor, username):
-    db_website = MySQLdb.connect('localhost', 'root', '123456', 'museum_website_v0', charset='utf8')
+    db_website = MySQLdb.connect('127.0.0.1', 'root', '123456', 'museum_website_v0', charset='utf8')
     cursor_website = db_website.cursor()
     a = get_user_vector(username, cursor_website)
     cursor_website.execute('SELECT DISTINCT username FROM website_recordviausername')
@@ -208,7 +208,7 @@ def item_based_CF_new(infor, username):
 def heat_recommend(infor):
     # heat_list 的结构是一个(文物名，热度值)的一个数组
     heat_list = []
-    db = MySQLdb.connect('localhost', 'root', '123456', 'museum_website_v0', charset='utf8')
+    db = MySQLdb.connect('127.0.0.1', 'root', '123456', 'museum_website_v0', charset='utf8')
     cursor = db.cursor()
     # 从数据库里把该文物的所有推荐记录读出来
     cursor.execute('SELECT * FROM website_recommendrecord WHERE MainAntique = %s'
@@ -243,7 +243,7 @@ def heat_recommend(infor):
 
 
 def weight_recommend(infor):
-    db = MySQLdb.connect('localhost', 'root', '123456', 'museumdb_new', charset='utf8')
+    db = MySQLdb.connect('127.0.0.1', 'root', '123456', 'museumdb_new', charset='utf8')
     cursor = db.cursor()
 
     recommend_list = []

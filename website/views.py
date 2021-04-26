@@ -3,7 +3,8 @@ from .user_database import add_to_db, log_in, add_to_record, add_to_recommend_re
 from .search import click_search
 from .connect_d2rq import *
 from .network_graph import graph
-import time
+import time, os
+
 # Create your views here.
 
 defult_recommend = ['后母戊鼎',
@@ -15,7 +16,7 @@ defult_recommend = ['后母戊鼎',
                     '孝端皇后凤冠',
                     '紫檀嵌珐琅重檐楼阁更钟']
 
-_image_path = 'D:/museum_pictures'
+_image_path = 'images'
 
 def register(request):
     # print(request.META)
@@ -132,9 +133,9 @@ def index_addition(request, info):
         result_return['username'] = user_name
         if 'museum' in result_dic:
             if result_dic['museum'] == '中国国家博物馆':
-                result_return['image_path'] = '/images/chn_pic/' + result_dic['number'][1:] + '.jpg'
+                result_return['image_path'] = os.path.join(_image_path, 'chn_pic/') + result_dic['number'][1:] + '.jpg'
             elif result_dic['museum'] == '故宫博物院':
-                result_return['image_path'] = '/images/dpm_pic/' + result_dic['number'][1:] + '.jpg'
+                result_return['image_path'] = os.path.join(_image_path, 'dpm_pic/') + result_dic['number'][1:] + '.jpg'
         if 'introduction' in result_dic:
             result_return['introduction'] = result_dic['introduction']
         if 'item_CF' in result_dic:
@@ -158,9 +159,9 @@ def index_addition(request, info):
         result_return['username'] = user_name
         if 'museum' in result_dic:
             if result_dic['museum'] == '中国国家博物馆':
-                result_return['image_path'] = '/images/chn_pic/' + result_dic['number'][1:] + '.jpg'
+                result_return['image_path'] = os.path.join(_image_path, 'chn_pic/') + result_dic['number'][1:] + '.jpg'
             elif result_dic['museum'] == '故宫博物院':
-                result_return['image_path'] = '/images/dpm_pic/' + result_dic['number'][1:] + '.jpg'
+                result_return['image_path'] = os.path.join(_image_path, 'dpm_pic/') + result_dic['number'][1:] + '.jpg'
         if 'introduction' in result_dic:
             result_return['introduction'] = result_dic['introduction']
         if 'name' in result_dic:
