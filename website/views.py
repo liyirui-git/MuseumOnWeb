@@ -16,7 +16,8 @@ defult_recommend = ['后母戊鼎',
                     '孝端皇后凤冠',
                     '紫檀嵌珐琅重檐楼阁更钟']
 
-_image_path = 'images'
+# 这里还是得换一下，这样写死是不行的
+_image_path = 'http://localhost:8080/images/images'
 
 def register(request):
     # print(request.META)
@@ -159,7 +160,7 @@ def index_addition(request, info):
         result_return['username'] = user_name
         if 'museum' in result_dic:
             if result_dic['museum'] == '中国国家博物馆':
-                result_return['image_path'] = os.path.join(_image_path, 'chn_pic/') + result_dic['number'][1:] + '.jpg'
+                result_return[' '] = os.path.join(_image_path, 'chn_pic/') + result_dic['number'][1:] + '.jpg'
             elif result_dic['museum'] == '故宫博物院':
                 result_return['image_path'] = os.path.join(_image_path, 'dpm_pic/') + result_dic['number'][1:] + '.jpg'
         if 'introduction' in result_dic:
