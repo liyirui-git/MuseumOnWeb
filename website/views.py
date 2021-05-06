@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from .user_database import add_to_db, log_in, add_to_record, add_to_recommend_record, add_to_search_record
 from .search import click_search
-from .connect_d2rq import *
 from .network_graph import graph
 import time, os
 
@@ -16,14 +15,12 @@ defult_recommend = ['后母戊鼎',
                     '孝端皇后凤冠',
                     '紫檀嵌珐琅重檐楼阁更钟']
 
-# 这里还是得换一下，这样写死是不行的
-_image_path = 'http://localhost:8080/images/images'
+# 这里对应的文物图片存放的位置
+# 我这里放在了MuseumOnWeb/images下
+# 这个path中的img是给url解析用的
+_image_path = '/img/images'
 
 def register(request):
-    # print(request.META)
-    # 从注册页准备注册，就开启D2RQ线程
-    # thread_d2rq = D2RQ()
-    # thread_d2rq.start()
     return render(request, "register.html")
 
 
@@ -124,6 +121,7 @@ def index_addition(request, info):
     if request.method == 'POST' and 'search_submit' in request.POST:
         search_content = request.POST.get("search_content", None)
         result_dic = click_search(search_content, user_name)
+        print(result_dic)
         if 'name' in result_dic:
             add_to_record(user_name, result_dic['name'])
             add_to_search_record(user_name, result_dic['name'], int(time.time()), 1)
@@ -154,13 +152,14 @@ def index_addition(request, info):
             return render(request, "index.html", result_return)
     else:
         result_dic = click_search(antique_name, user_name)
+        print(result_dic)
         # 生成关系图
         result_return['old_antiname'] = antique_name
         result_return['network_graph'] = graph(result_dic)
         result_return['username'] = user_name
         if 'museum' in result_dic:
             if result_dic['museum'] == '中国国家博物馆':
-                result_return[' '] = os.path.join(_image_path, 'chn_pic/') + result_dic['number'][1:] + '.jpg'
+                result_return['image_path'] = os.path.join(_image_path, 'chn_pic/') + result_dic['number'][1:] + '.jpg'
             elif result_dic['museum'] == '故宫博物院':
                 result_return['image_path'] = os.path.join(_image_path, 'dpm_pic/') + result_dic['number'][1:] + '.jpg'
         if 'introduction' in result_dic:
