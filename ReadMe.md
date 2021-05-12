@@ -48,4 +48,5 @@ C:\ProgramFiles\Anaconda3\python manage.py runserver 0.0.0.0:8080
 ```
 PYTHONIOENCODING=utf8 python manage.py runserver 0.0.0.0:8080
 ```
-
+目前存在的问题是，按照问题做相关检索的功能失效了。
+例如，在搜索框中输入“出土于山东的文物有哪些？”会直接跳转到首页。

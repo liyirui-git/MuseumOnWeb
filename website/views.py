@@ -121,7 +121,6 @@ def index_addition(request, info):
     if request.method == 'POST' and 'search_submit' in request.POST:
         search_content = request.POST.get("search_content", None)
         result_dic = click_search(search_content, user_name)
-        print(result_dic)
         if 'name' in result_dic:
             add_to_record(user_name, result_dic['name'])
             add_to_search_record(user_name, result_dic['name'], int(time.time()), 1)
@@ -152,7 +151,6 @@ def index_addition(request, info):
             return render(request, "index.html", result_return)
     else:
         result_dic = click_search(antique_name, user_name)
-        print(result_dic)
         # 生成关系图
         result_return['old_antiname'] = antique_name
         result_return['network_graph'] = graph(result_dic)
